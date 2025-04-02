@@ -10,6 +10,7 @@ helpful_links = [
 ]
 
 # Write directly to the app
+st.title('Customize Your Order')
 name_on_order = st.text_input("Name on smoothie")
 st.write("The name on your smoothie will be:", name_on_order)
 
