@@ -1,7 +1,6 @@
 # Import python packages
 import streamlit as st
 from snowflake.snowpark.functions import col, when_matched
-from snowflake.snowpark.context import get_active_session
 
 helpful_links = [
     "https://docs.streamlit.io",
@@ -14,7 +13,8 @@ helpful_links = [
 name_on_order = st.text_input("Name on smoothie")
 st.write("The name on your smoothie will be:", name_on_order)
 
-session = get_active_session()
+cnx = st.connection("snowflake")
+session = cnx.session()
 og_dataset = session.table("smoothies.public.orders")
 
 
