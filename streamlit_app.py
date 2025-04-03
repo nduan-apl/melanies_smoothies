@@ -1,4 +1,5 @@
 # Import python packages
+import pandas as pd
 import requests
 import streamlit as st
 
@@ -21,7 +22,8 @@ session = cnx.session()
 og_dataset = session.table("smoothies.public.orders")
 
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'))
+my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'), col('search_on'))
+pd_df = my_dataframe.to_pandas()
 
 
 ingredients_list = st.multiselect(
@@ -38,6 +40,10 @@ if ingredients_list:
 
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
+
+        search_on = pd_df.loc[pd_df['fruit_name'] == fruit_chosen, 'search_on'].iloc[0]
+        st.write(f'Search value for {fruit_name} is {search_on}')
+        
         st.subheader(f"{fruit_chosen} Nutrition Information")
         smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen}")
         sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
